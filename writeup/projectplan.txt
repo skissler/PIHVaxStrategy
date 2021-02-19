@@ -1,0 +1,129 @@
+It's unlikely that race itself causes inequities in covid outcomes - but clearly race predicts other things that do cause poor covid outcomes. 
+
+How to model this? 
+
+Start with the simplest thing possible: 
+	o distribution of interpersonal contacts - leads to both risk of infection and risk of transmission. 
+	o Also: risk of severe outcomes (defined somehow?) 
+
+Look at age matrices for a range of potential interpersonal interaction contexts. How can we account for this? too complex to fool arorund with secondary infections I think, unfortunately. or to do so in any rigorous way. But we could assign to each person a number of contacts, according to some distributtion. We have the age distribution - the individual distribution must be some range within this. Right? Anything we can do from the BBC contact data? 
+
+And at what level are we interested here? really we're tthinking about community vaccinattion plans, right? 
+
+need to do a very broad sensitivity analysis here. 
+
+Some distribution defining the number of potentially infectious contacts in a given day. or something like that. 
+
+Number of contacts - and entropy of those contacts ,as in how many are unique contacts day after day, and how many are the same people over and over again? 
+
+really this is trying to define some sort of network structure - which we probably don't want to wade into due to the massive number of assumptions we'd need. 
+
+We do have the distribution of contacts from the BBC data - that's useful. see figure 6 from contacts in context. 
+
+So - what's the argument here? 
+
+The idea is that age is just one axis of risk. There are others. How can we quantify tthis? At what point do these other axes intersect with the axis of age, and then it makes sense to vaccinate along these other axes? 
+
+Maybe stick with future risk. Or do both: talk about future risk, but also put in a scenario of how you'd account for past risk in a community. 
+
+How? 
+
+We have a risk of infection that is actually governed by three thinsg: 
+
+	o community transmission
+	o contacts with the community
+	o age/comorbidities/risk of severe disease 
+
+That's interesting. I think this is all? How can we think about these axes? simply? 
+
+We have a contact distribution. 
+We know roughly what the risk distribution is by age and comorbidity (and how these align with race). We could just make this a "severe outcome risk index" or something like that - something that's subject to change as ore information comes in. 
+
+I shoould really code this up as a shiny app. That would be the msot useful wya forward. 
+
+And what would we want people to be able to adjust? 
+
+We might ahve some populaito ncharacteristics: 
+
+	o a distribution governing the probability of having some number of secondary infections. 
+	o A distribution of severe outcome risk - that intersects with that first distribution somehow? so that for example yougner people are more likely to have lots of contacts (arbitrary choice for illustration). 
+	o and finally a sense of prelvanece in the ocmmunity maybe, to get a sense of the baseline risk of infection in the community. Then, whom do you vaccinaatte? 
+
+
+Is there some way to make it easy for people to adjust these key distributions on their own? 
+
+we want to know - how should we vaccinate on the axes of severe risk fo outcome and many contacts, given some prevalence of infection (or R, or both?). That's an interesting question. 
+
+If we assume that the secondary infection distribution is negative binomial - then we just need to distribute that risk by age. SOme way to do this with conditional probability? 
+
+As in: for a given age group, what's the distribution of contacts? or, for each number of contacts, what's the age distribution? that might be the way to do it. 
+
+I do worry about this gettign too arbitrary orr having too many axes of variation to be useful. 
+
+Note that in the science paper we just evaluated one group as the prioritized group and then everyone else followed after - so this acttually follows on nicely from that. 
+
+it would be nice to build an explicit sense of reciprocity into the model... for those hwo have suffered most so far from the outbreak. not sure how to do that yet though. 
+
+the other key factor here is historical vaccine uptake - so that to just get the vaccination rates equal, we'll have to do sttronger outreach in communities that historically don't get vaccinated at the same rate as more affluent and whiter communities. 
+
+probably worth making the structural racism argument from a mathematical standpoint.
+
+could also do a synthetic contact matrix for a few different rough strata of people. tough to do though. 
+
+what categories of people are we interested in? 
+
+public transit workers 
+custodians 
+people living in large homes 
+
+
+maybe we can just think about interpersonal contacts though, and communities can figure out for themselves who has high numbers. 
+
+think about each person's risk individually maybe - rather than a standard epi model. we're just thinking about prevalene in the ocmmunity, but not about the specific dynamics of the disease itself. we're not necessarily trying to block transmission here most effecttively - we're trying to protect people. I think that makes sense. and we can discuss the added benefit of transmission blocking. 
+
+different asusmptions: 
+	o risk of severe outcome is unrelated to number of contacts
+	o risk of severe outcome increases with number of contacts
+	o risk of severe outcome decreases with numberr of contacts 
+	o risk of severe outccome is bomidal with number of contacts 
+
+ I think we can explore each of these. 
+
+ tthink about high prevalence, medium prevalence, and low prevalence settings. 
+
+ I think this would make sense. I really don't think we should do prospective epidemiological modeling here, because so much will depend on what's happening in teh surroundings. we're not trying to give guidelinse to countries here, we're giving them to communities. 
+
+ I think? 
+
+ we could have a person define the marginal distributions of contacts and of severe outcomes, and then look at a range of plausible joint distributions? 
+
+Could ask the user to input a few control points to help inform the joint distribution. That could be interesting. 
+
+we could even import the age distribution by census tract. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
