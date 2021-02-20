@@ -39,14 +39,18 @@ casecounts <- tibble(t=1:tmax,
 	I=rep(0,tmax),
 	R=rep(0,tmax))	
 
-Evec <- matrix(rep(0,N),ncol=1)		# Initialize exposed vector	
-Ivec <- matrix(rep(0,N),ncol=1)		# Initialize infectious vector
-Ivec[1] <- 1						# Initialize initial infected
-Rvec <- matrix(rep(0,N),ncol=1)		# Initialize recovered vector
+# Initialize compartment vectors:
+Evec <- matrix(rep(0,N),ncol=1)
+Ivec <- matrix(rep(0,N),ncol=1)
+Ivec[1] <- 1
+Rvec <- matrix(rep(0,N),ncol=1)
 
+# Fill output tibble with initial compartment sums:
 casecounts$E[1] <- sum(Evec)
 casecounts$I[1] <- sum(Ivec)
 casecounts$R[1] <- sum(Rvec)
+
+# Increment time:
 t <- 2
 
 # Define adjacency matrix here if it's meant to be static:
@@ -72,6 +76,7 @@ while(t<=tmax & (sum(Evec)+sum(Ivec))>0){
 	t <- t+1
 
 }
+# Fill in remaining time if necessary:
 casecounts[(t-1):tmax,-1] <- casecounts[t-1,-1]
 
 fig_casecounts <- casecounts %>% 
