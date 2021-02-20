@@ -23,20 +23,25 @@ tmax <- 90			# Max days to run the simulation
 # Calculate key quantities
 # =============================================================================
 
-pinf <- R0/(nbin.mean*Imean)	# Infection probability per contact-day
+# Infection probability per contact-day:
+pinf <- R0/(nbin.mean*Imean)	
+
+# Define contact weights for specifying adjacency matrix: 
+Wi <- make_contact_weights(N=N, nbin.size=nbin.size, nbin.mean=nbin.mean)
 
 # =============================================================================
 # Run simulation
 # =============================================================================
 
-casecounts <- tibble(t=1:tmax,	# Initialize output tibble
+# Initialize output tibble: 
+casecounts <- tibble(t=1:tmax,	
 	E=rep(0,tmax),
 	I=rep(0,tmax),
 	R=rep(0,tmax))	
 
 Evec <- matrix(rep(0,N),ncol=1)		# Initialize exposed vector	
 Ivec <- matrix(rep(0,N),ncol=1)		# Initialize infectious vector
-Ivec[2] <- 1						# Initialize initial infected
+Ivec[1] <- 1						# Initialize initial infected
 Rvec <- matrix(rep(0,N),ncol=1)		# Initialize recovered vector
 
 casecounts$E[1] <- sum(Evec)
@@ -45,12 +50,12 @@ casecounts$R[1] <- sum(Rvec)
 t <- 2
 
 # Define adjacency matrix here if it's meant to be static:
-A <- make_adj(N=N, nbin.size=nbin.size, nbin.mean=nbin.mean)
+A <- make_adj(weights=Wi)
 
 while(t<=tmax & (sum(Evec)+sum(Ivec))>0){
 
 	# Define adjacency matrix here if it's meant to be dynamic:
-	# A <- make_adj(N=N, nbin.size=nbin.size, nbin.mean=nbin.mean) 
+	# A <- make_adj(weights=Wi) 
 
 	newE <- (runif(N)<(pinf*A%*%Ivec))*(1-Evec)*(1-Ivec)*(1-Rvec)
 	newI <- (runif(N)<(1/Emean*Evec))*1
@@ -72,7 +77,7 @@ casecounts[(t-1):tmax,-1] <- casecounts[t-1,-1]
 fig_casecounts <- casecounts %>% 
 	pivot_longer(c("E","I","R")) %>%
 	ggplot(aes(x=t, y=value, col=name)) + 
-		geom_point() + 
+		geom_point(size=0.5) + 
 		geom_line() + 
 		scale_y_continuous(limits=c(0,N)) + 
 		theme_minimal() + 
