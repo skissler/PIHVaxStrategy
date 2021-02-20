@@ -5,8 +5,9 @@ Simulation code is in code/sim_epi.R.
 
 To do: 
 - [x] Fix infection probabilities (product, not sum)
-- [ ] Implement prioritized vaccination (currently just random)
+- [x] Implement prioritized vaccination (currently just random)
 - [ ] Implement infection and transmission blocking 
 - [ ] Implement correlation between contacts and risk (use RR defined from reference at the mean number of contacts)
+- [ ] Simulate many epidemics and summarize
  
 ![alt text](https://github.com/skissler/PIHVaxStrategy/blob/dev_DefineSeverity/figures/casecounts.png)
