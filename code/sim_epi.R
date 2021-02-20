@@ -50,7 +50,7 @@ mortrisk <- sample(ifr$ifr, size=N, replace=TRUE, prob=popdist2019$prop)
 # =============================================================================
 
 # Initialize output tibble: 
-casecounts <- tibble(t=1:tmax,	
+casecounts <- tibble(t=1:tmax,
 	E=rep(0,tmax),	# Exposed
 	I=rep(0,tmax),	# Infectious
 	R=rep(0,tmax),	# Recovered
@@ -83,7 +83,7 @@ while(t<=tmax & (sum(Evec)+sum(Ivec))>0){
 	# Define adjacency matrix here if it's meant to be dynamic:
 	# A <- make_adj(weights=Wi) 
 
-	newE <- (runif(N)<(pinf*A%*%Ivec))*(1-Evec)*(1-Ivec)*(1-Rvec)*(1-Xvec)
+	newE <- (runif(N)<(1-(1-pinf)^(A%*%Ivec)))*(1-Evec)*(1-Ivec)*(1-Rvec)*(1-Xvec)
 	newI <- (runif(N)<(1/Emean*Evec))*1
 	newR <- (runif(N)<(1/Imean*Ivec))*1
 	newX <- (runif(N)<(newR*mortrisk*(1-Vvec*vax_strategy$efficacy)))*1

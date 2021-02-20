@@ -4,7 +4,7 @@ Stephen Kissler (skissler@hsph.harvard.edu), Rebecca Kahn
 Simulation code is in code/sim_epi.R. 
 
 To do: 
-- [ ] Fix infection probabilities (product, not sum)
+- [x] Fix infection probabilities (product, not sum)
 - [ ] Implement prioritized vaccination (currently just random)
 - [ ] Implement infection and transmission blocking 
 - [ ] Implement correlation between contacts and risk (use RR defined from reference at the mean number of contacts)
