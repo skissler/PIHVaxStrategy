@@ -38,20 +38,23 @@ mortrisk <- sample(ifr$ifr, size=N, replace=TRUE, prob=popdist2019$prop)
 
 # Initialize output tibble: 
 casecounts <- tibble(t=1:tmax,	
-	E=rep(0,tmax),
-	I=rep(0,tmax),
-	R=rep(0,tmax))	
+	E=rep(0,tmax),	# Exposed
+	I=rep(0,tmax),	# Infectious
+	R=rep(0,tmax),	# Recovered
+	X=rep(0,tmax))	# Deceased
 
 # Initialize compartment vectors:
 Evec <- matrix(rep(0,N),ncol=1)
 Ivec <- matrix(rep(0,N),ncol=1)
 Ivec[1] <- 1
 Rvec <- matrix(rep(0,N),ncol=1)
+Xvec <- matrix(rep(0,N),ncol=1)
 
 # Fill output tibble with initial compartment sums:
 casecounts$E[1] <- sum(Evec)
 casecounts$I[1] <- sum(Ivec)
 casecounts$R[1] <- sum(Rvec)
+casecounts$X[1] <- sum(Xvec)
 
 # Increment time:
 t <- 2
@@ -67,14 +70,18 @@ while(t<=tmax & (sum(Evec)+sum(Ivec))>0){
 	newE <- (runif(N)<(pinf*A%*%Ivec))*(1-Evec)*(1-Ivec)*(1-Rvec)
 	newI <- (runif(N)<(1/Emean*Evec))*1
 	newR <- (runif(N)<(1/Imean*Ivec))*1
+	newX <- (runif(N)<(newR*mortrisk))*1
+	newR <- newR - newX
 
 	Evec <- Evec + newE - newI
 	Ivec <- Ivec + newI - newR
 	Rvec <- Rvec + newR
+	Xvec <- Xvec + newX
 
 	casecounts$E[t] <- sum(Evec)
 	casecounts$I[t] <- sum(Ivec)
 	casecounts$R[t] <- sum(Rvec)
+	casecounts$X[t] <- sum(Xvec)
 
 	t <- t+1
 
@@ -83,11 +90,28 @@ while(t<=tmax & (sum(Evec)+sum(Ivec))>0){
 casecounts[(t-1):tmax,-1] <- casecounts[t-1,-1]
 
 fig_casecounts <- casecounts %>% 
-	pivot_longer(c("E","I","R")) %>%
+	pivot_longer(c("E","I","R","X")) %>%
 	ggplot(aes(x=t, y=value, col=name)) + 
 		geom_point(size=0.5) + 
 		geom_line() + 
 		scale_y_continuous(limits=c(0,N)) + 
 		theme_minimal() + 
 		labs(x="Day", y="Cases",col="Compartment")
+
+
+
+# A list that contains the start time for vaccination and the percent of the population at which to switch strategies. Possible strategies are "risk" (prioritize those at highest risk), "contact" (prioritize those with the most contacts), or "anyone" (vaccinate at random). Also sets the amountt of infecttion blocking and transmission blocking that the vaccine gives. I think this makes it a 'leaky' vaccine. 
+
+vax_strategy <- list(
+	tstart=45,
+	infblock=0.5,
+	transblock=0.5,
+	pswitch=tibble(
+		pstart=c(0,0.1), 
+		pend=c(0.1,0.6), 
+		prioritize=c("risk","contact")))
+
+
+
+
 
