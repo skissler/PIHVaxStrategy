@@ -22,15 +22,14 @@ tmax <- 90			# Max days to run the simulation
 # A list that contains the start time for vaccination and the percent of the population at which to switch strategies. Possible strategies are "risk" (prioritize those at highest risk), "contact" (prioritize those with the most contacts), or "anyone" (vacinate at random), or "none" if vaccinattion is to stop. Also sets the amountt of infecttion blocking and transmission blocking that the vaccine gives. I think this makes it a 'leaky' vaccine. 
 
 vax_strategy <- list(
-	tstart=1,
+	tstart=30,
 	daily_nvax=floor(0.002*N),
-	# daily_pvax=0.002,
 	efficacy=0.95,
-	infblock=0,
-	transblock=0,
+	infblock=0.5,
+	transblock=0.5,
 	pswitch=tibble(
-		pstart=c(0,0.5,0.6), 
-		pend=c(0.5,0.6,1.0), 
+		pstart= c(0.0, 0.1, 0.6), 
+		pend  = c(0.1, 0.6, 1.0), 
 		prioritize=c("mortality","contact","none")))
 
 # =============================================================================
@@ -114,7 +113,11 @@ while(t<=tmax){
 	}
 
 	# Propose transitions	
-	newE <- (runif(N)<(1-(1-pinf)^(A%*%Ivec)))*(1-Evec)*(1-Ivec)*(1-Rvec)*(1-Xvec) # New S -> E
+	newE <- (
+		runif(N) < (
+			(1-Vvec*vax_strategy$infblock)*
+			(1-(1-pinf)^(A%*%(Ivec*(1-Vvec*vax_strategy$transblock)))))
+		)*(1-Evec)*(1-Ivec)*(1-Rvec)*(1-Xvec) # New S -> E
 	newI <- (runif(N)<(1/Emean*Evec))*1 # New E -> I
 	newR <- (runif(N)<(1/Imean*Ivec))*1	# New I -> R (though some will split off to X)
 	newX <- (runif(N)<(newR*mortrisk*(1-Vvec*vax_strategy$efficacy)))*1 # New I -> X
@@ -161,7 +164,7 @@ fig_casecounts <- casecounts %>%
 		scale_y_continuous(limits=c(0,N)) + 
 		theme_minimal() + 
 		labs(x="Day", y="Cases",col="Compartment")
-ggsave(fig_casecounts, file="figures/casecounts.png", width=8, height=5)
+# ggsave(fig_casecounts, file="figures/casecounts.png", width=8, height=5)
 
 
 
