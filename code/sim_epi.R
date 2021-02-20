@@ -29,6 +29,9 @@ pinf <- R0/(nbin.mean*Imean)
 # Define contact weights for specifying adjacency matrix: 
 Wi <- make_contact_weights(N=N, nbin.size=nbin.size, nbin.mean=nbin.mean)
 
+# Define individual ifr
+mortrisk <- sample(ifr$ifr, size=N, replace=TRUE, prob=popdist2019$prop)
+
 # =============================================================================
 # Run simulation
 # =============================================================================
@@ -87,5 +90,4 @@ fig_casecounts <- casecounts %>%
 		scale_y_continuous(limits=c(0,N)) + 
 		theme_minimal() + 
 		labs(x="Day", y="Cases",col="Compartment")
-
 
