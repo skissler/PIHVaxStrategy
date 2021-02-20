@@ -121,7 +121,7 @@ fig_casecounts <- casecounts %>%
 		theme_minimal() + 
 		labs(x="Day", y="Cases",col="Compartment")
 
-
+ggsave(fig_casecounts, file="figures/casecounts.png", width=8, height=5)
 
 
 
