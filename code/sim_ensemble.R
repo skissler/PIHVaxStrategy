@@ -102,9 +102,6 @@ for(vs in 1:length(vax_strategy_list)){
 	}
 }
 
-# casecounts <- bind_rows(casecountslist,.id="sim") %>% mutate(sim=as.numeric(sim))
-# rm(casecountslist)
-
 # =============================================================================
 # Summarize output
 # =============================================================================
