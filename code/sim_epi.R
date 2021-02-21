@@ -19,6 +19,11 @@ Imean <- 4 			# Mean infectious period (days)
 
 tmax <- 90			# Max days to run the simulation
 
+# Define relative risk of low-contact and high-contact people
+# (relative to median-contact people) to suffer the highest IFR:
+# RR_lowcontact <- 2
+# RR_highcontact <- 2
+
 # A list that contains the start time for vaccination and the percent of the population at which to switch strategies. Possible strategies are "risk" (prioritize those at highest risk), "contact" (prioritize those with the most contacts), or "anyone" (vacinate at random), or "none" if vaccinattion is to stop. Also sets the amountt of infecttion blocking and transmission blocking that the vaccine gives. I think this makes it a 'leaky' vaccine. 
 
 vax_strategy <- list(
@@ -55,6 +60,9 @@ priority <- tibble(id=1:N, contacts=Wi, mortality=mortrisk) %>%
 	mutate(mortality_priority=1:N) %>%
 	arrange(id) %>%
 	select(-contacts, -mortality)
+
+# ggplot(priority, aes(x=contact_priority/N, y=mortality_priority/N)) + 
+# 	geom_point() 
 
 # =============================================================================
 # Run simulation

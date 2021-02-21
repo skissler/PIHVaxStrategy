@@ -97,7 +97,48 @@ ifr <- tibble(
 		8.301160e-02))
 
 
+make_toprow <- function(rho_l, rho_h, N){
+	eval_pts <- seq(from=0, to=1, length.out=N)
+	out <- rep(0, N)
+	out[eval_pts<=0.5] <- rho_l - (rho_l-1)/0.5*eval_pts[eval_pts<=0.5]
+	out[eval_pts>0.5] <- (1-(rho_h-1)) + (rho_h-1)/0.5*(eval_pts[eval_pts>0.5])
+	return(out)
+}
 
+make_RRmat <- function(rho_l, rho_h, N){
+	toprow <- make_toprow(rho_l, rho_h, N)
+	bottomrow <- make_toprow(1/rho_l, 1/rho_h, N)
+	out <- matrix(unlist(map2(toprow, bottomrow, function(x,y){seq(from=x,to=y,length.out=N)})),nrow=N)
+	return(out)
+}
+
+assign_mortality <- function(rho_l, rho_h, N){
+
+	mcpairs <- tibble(m=rep(0,N), c=rep(0,N))
+
+	RRmat <- make_RRmat(rho_l, rho_h, N)
+	for(m in sample(1:N)){
+		c <- sample(1:N, 1, prob=RRmat[m,])
+		RRmat[,c] <- 0
+		mcpairs[m,] <- tibble(m=m, c=c)
+	}
+
+	# Need to reverse order of 'c' since RRmat[1,1] is high-mortality but low-contact. Want 1 to correspond to both high mortality and high contact.
+	mcpairs$c <- (N+1)-mcpairs$c
+
+	return(mcpairs)
+
+}
+
+# temp <- assign_mortality(1000,1000,101)
+
+# plot(temp$c, temp$m)
+
+# N <- 100
+# ggplot(assign_mortality(1,1,N), aes(x=c/N, y=m/N)) + geom_point()
+
+
+# 1:10
 
 
 
