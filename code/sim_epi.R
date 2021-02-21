@@ -6,38 +6,6 @@ library(tidyverse)
 source('code/utils.R')
 
 # =============================================================================
-# Set key parameters
-# =============================================================================
-
-R0 <- 3 			# Basic reproduction number
-N <- 4000 			# Population size
-nbin.size <- 1.68	# Neg.Bin. contact distribution size parameter
-nbin.mean <- 10.47	# Neg.Bin. contact distribution mean
-
-Emean <- 3 			# Mean exposure period (days)
-Imean <- 4 			# Mean infectious period (days) 
-
-tmax <- 90			# Max days to run the simulation
-
-# Define relative risk of low-contact and high-contact people
-# (relative to median-contact people) to suffer the highest IFR:
-# RR_lowcontact <- 2
-# RR_highcontact <- 2
-
-# A list that contains the start time for vaccination and the percent of the population at which to switch strategies. Possible strategies are "risk" (prioritize those at highest risk), "contact" (prioritize those with the most contacts), or "anyone" (vacinate at random), or "none" if vaccinattion is to stop. Also sets the amountt of infecttion blocking and transmission blocking that the vaccine gives. I think this makes it a 'leaky' vaccine. 
-
-vax_strategy <- list(
-	tstart=30,
-	daily_nvax=floor(0.002*N),
-	efficacy=0.95,
-	infblock=0.5,
-	transblock=0.5,
-	pswitch=tibble(
-		pstart= c(0.0, 0.1, 0.6), 
-		pend  = c(0.1, 0.6, 1.0), 
-		prioritize=c("mortality","contact","none")))
-
-# =============================================================================
 # Calculate key quantities
 # =============================================================================
 
@@ -164,14 +132,14 @@ while(t<=tmax){
 }
 
 # Plot output: 
-fig_casecounts <- casecounts %>% 
-	pivot_longer(c("E","I","R","X","V")) %>%
-	ggplot(aes(x=t, y=value, col=name)) + 
-		geom_point(size=0.5) + 
-		geom_line() + 
-		scale_y_continuous(limits=c(0,N)) + 
-		theme_minimal() + 
-		labs(x="Day", y="Cases",col="Compartment")
+# fig_casecounts <- casecounts %>% 
+# 	pivot_longer(c("E","I","R","X","V")) %>%
+# 	ggplot(aes(x=t, y=value, col=name)) + 
+# 		geom_point(size=0.5) + 
+# 		geom_line() + 
+# 		scale_y_continuous(limits=c(0,N)) + 
+# 		theme_minimal() + 
+# 		labs(x="Day", y="Cases",col="Compartment")
 # ggsave(fig_casecounts, file="figures/casecounts.png", width=8, height=5)
 
 

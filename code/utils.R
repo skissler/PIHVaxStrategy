@@ -130,6 +130,20 @@ assign_mortality <- function(rho_l, rho_h, N){
 
 }
 
+summarize_casecounts <- function(casecounts){
+	
+	finalR <- casecounts %>% filter(t==90) %>% select(sim, vax_strategy, R)
+	finalX <- casecounts %>% filter(t==90) %>% select(sim, vax_strategy, X)
+	
+	out <- inner_join(finalR, finalX, by=c("sim","vax_strategy")) %>% 
+		rename(finalR=R, finalX=X) %>%
+		mutate(finalsize=finalR+finalX) %>%
+		select(-finalR)
+
+	return(out)
+}
+
+
 # temp <- assign_mortality(1000,1000,101)
 
 # plot(temp$c, temp$m)
