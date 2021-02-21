@@ -10,4 +10,4 @@ To do:
 - [ ] Implement correlation between contacts and risk (use RR defined from reference at the mean number of contacts)
 - [ ] Simulate many epidemics and summarize
  
-![alt text](https://github.com/skissler/PIHVaxStrategy/blob/dev_DefineSeverity/figures/casecounts.png)
+![alt text](https://github.com/skissler/PIHVaxStrategy/blob/main/figures/casecounts.png)
