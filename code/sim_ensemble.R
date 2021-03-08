@@ -108,6 +108,19 @@ for(vs in 1:length(vax_strategy_list)){
 
 casecounts_summary <- summarize_casecounts(casecounts_full)
 write_csv(casecounts_summary, file="output/casecounts_summary.csv")
+casecounts_summary <- read_csv("output/casecounts_summary.csv")
+
+casecounts_summary %>% 
+	filter(finalsize>2000) %>% 
+	ggplot(aes(x=finalsize, col=factor(vax_strategy))) + 
+		geom_density(adjust=2) + 
+		theme_minimal() 
+
+casecounts_summary %>% 
+	filter(finalsize>2000) %>% 
+	ggplot(aes(x=finalX, col=factor(vax_strategy))) + 
+		geom_density(adjust=2) + 
+		theme_minimal() 
 
 casecounts_summary %>% 
 	filter(finalsize>50) %>%
